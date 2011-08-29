@@ -18,9 +18,9 @@ package de.schneider.dev.poi.service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.net.URLCodec;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -31,11 +31,10 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.thoughtworks.xstream.XStream;
-
 /**
  * Service to provide access to the Google Geocoding API (v3)
  * http://code.google.com/apis/maps/documentation/geocoding/
+ * 
  * @author Sebastian Schneider
  *
  */
@@ -47,15 +46,16 @@ public class GoogleMapGeoService {
 	
 	private final static String DEFAULT_XML_URI = "http://maps.googleapis.com/maps/api/geocode/xml?address=";
 	
-	public void getGeoCoordinate(String location) throws UnsupportedEncodingException {
+	public void getGeoCoordinate(String location) throws EncoderException {
 		
-		LOG.info("Start GeoCoordination");
+		LOG.info("Start GeoCoordination Google Map");
 		
 		// create default HttpClient
 		HttpClient httpClient = new DefaultHttpClient();
 		
 		// get data from URI
-		HttpGet httpGet = new HttpGet(DEFAULT_XML_URI + URLEncoder.encode(location, "UTF-8") + "&sensor=false");
+		URLCodec urlCodec = new URLCodec("UTF-8");
+		HttpGet httpGet = new HttpGet(DEFAULT_JSON_URI + urlCodec.encode(location) + "&sensor=false");
 		LOG.info("HttpGet: " + httpGet);
 		
 		// get response
@@ -65,22 +65,16 @@ public class GoogleMapGeoService {
 			LOG.info("Status Code: " + httpResponse.getStatusLine().getStatusCode());
 			LOG.info("Status Phrase: " + httpResponse.getStatusLine().getReasonPhrase());
 			
-			
 			HttpEntity httpEntity = httpResponse.getEntity();
 			LOG.info("HttpEntity: " + httpEntity);
 			LOG.info("HttpEntity Streaming: " + httpEntity.isStreaming());
 			if (httpEntity.isStreaming()) {
 				InputStream inputStream = httpEntity.getContent();
-				long contentLength = httpEntity.getContentLength();
 				String content = EntityUtils.toString(httpEntity);
-				LOG.info("InputStream: " + content);
-				inputStream.close();
+				LOG.info(content);
+				inputStream.close();				
 			}
 			
-			
-			XStream xStream = new XStream();
-			
-			LOG.info("INFO");
 		} catch (ClientProtocolException cpe) {
 			LOG.error(cpe.toString());
 		} catch (IOException ioe) {

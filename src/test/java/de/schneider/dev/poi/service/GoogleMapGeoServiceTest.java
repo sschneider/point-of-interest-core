@@ -16,8 +16,6 @@
  */
 package de.schneider.dev.poi.service;
 
-import static org.junit.Assert.*;
-
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -34,9 +32,14 @@ public class GoogleMapGeoServiceTest {
 	}
 	
 	@Test
-	public void testGetGeoCoordinate() throws Exception {
+	public void getGeoCoordinate() throws Exception {
 		GoogleMapGeoService googleMapGeoService = new GoogleMapGeoService();
 		googleMapGeoService.getGeoCoordinate("1600 Amphitheatre Parkway, Mountain View, CA");
+		
+		
+				
+				
+				
 	}
 
 }

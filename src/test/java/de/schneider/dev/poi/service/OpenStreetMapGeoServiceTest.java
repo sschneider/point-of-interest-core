@@ -18,6 +18,7 @@ package de.schneider.dev.poi.service;
 
 import static org.junit.Assert.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -26,9 +27,15 @@ import org.junit.Test;
  */
 public class OpenStreetMapGeoServiceTest {
 
+	@Ignore("Not Ready to Run!")
 	@Test
 	public void test() {
 		fail("Not yet implemented");
 	}
 
+	@Test
+	public void getGeoCoordinate() throws Exception {
+		OpenStreetMapGeoService openStreetMapGeoService = new OpenStreetMapGeoService();
+		openStreetMapGeoService.getGeoCoordinate("135 pilkington avenue, birmingham");
+	}
 }
